@@ -1,9 +1,8 @@
-FROM maven:3.6.3-jdk-11-slim AS build
-COPY . /app
+# Start with a base image that has Java 11 installed
+FROM openjdk:17-jdk-alpine
 WORKDIR /app
-RUN mvn clean package
+COPY target/cs333-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-cp", "app.jar", "cs333.Bartender"]
 
-FROM openjdk:11-jre-slim
-WORKDIR /app
-COPY --from=build /app/target/*.jar /app/app.jar
-CMD ["java", "-jar", "app.jar"]
+
